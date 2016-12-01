@@ -9,5 +9,4 @@ cp -R mxgraph/javascript/mxClient.js ../Resources/Public/vendor/mxgraph/
 cp -R mxgraph/javascript/src/css/ ../Resources/Public/vendor/mxgraph/css
 cp -R mxgraph/javascript/src/images/ ../Resources/Public/vendor/mxgraph/images
 
-
 rm -Rf ../Resources/Public/vendor/mxgraph/*.html

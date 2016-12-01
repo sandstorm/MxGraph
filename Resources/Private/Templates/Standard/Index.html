@@ -98,7 +98,7 @@
 
 			// Main
         var editor = new Editor(urlParams['chrome'] == '0', themes);
-			new EditorUi(editor);
+			var editorUi = new EditorUi(editor);
 
 
 		var doc = mxUtils.parseXml({diagram -> f:format.json() -> f:format.raw()});
@@ -108,7 +108,30 @@
 
 		var children = model.getChildren(model.getChildAt(model.getRoot(), 0));
 		editor.graph.setSelectionCells(editor.graph.importCells(children));
-		editor.filename = {diagramNode -> f:format.json() -> f:format.raw()};
+		editor.filename = {diagramNode -> f:format.json() -> f:format.raw()};;
+
+		editorUi.save = function(filename) {
+        console.log("OVERRIDING SAVW");
+        if (this.editor.graph.isEditing())
+        {
+          this.editor.graph.stopEditing();
+        }
+
+        var xml = mxUtils.getXml(this.editor.getGraphXml());
+        console.log("SAVE xml", xml);
+
+		    var svg = mxUtils.getXml(this.editor.graph.getSvg('#FFFFFF', 1, 10));
+
+		    new mxXmlRequest(window.SAVE_URL, 'xml=' + encodeURIComponent(xml) + '&filename=' +
+        encodeURIComponent(filename) + '&svg=' + encodeURIComponent(svg)).send(function() {
+        	if (window.opener && window.opener.Typo3Neos && window.opener.Typo3Neos.Content) {
+	          window.opener.Typo3Neos.Content.reloadPage();
+          }
+        });
+
+		  this.editor.setModified(false);
+		  this.updateDocumentTitle();
+    };
 
 		}, function()
 		{
