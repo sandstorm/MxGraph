@@ -1,0 +1,18 @@
+'Sandstorm.MxGraph:Diagram':
+  superTypes:
+    'TYPO3.Neos:Content': TRUE
+    'TYPO3.Neos.NodeTypes:ContentImageMixin': TRUE
+  ui:
+    label: 'Diagram'
+    icon: 'icon-picture'
+    position: 300
+  properties:
+    image:
+      ui:
+        reloadIfChanged: TRUE
+        inspector: ~
+    diagramSource:
+      ui:
+        inspector:
+          editor: Sandstorm.MxGraph/Editors/DiagramEditor
+          group: 'image'

@@ -1,0 +1,3 @@
+prototype(Sandstorm.MxGraph:Diagram) < prototype(TYPO3.Neos.NodeTypes:Image) {
+    templatePath = 'resource://TYPO3.Neos.NodeTypes/Private/Templates/NodeTypes/Image.html'
+}

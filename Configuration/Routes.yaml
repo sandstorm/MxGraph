@@ -1,0 +1,9 @@
+-
+  name: 'MXGraph'
+  uriPattern:    'neos/mxgraph(/{@action})'
+  defaults:
+    '@package':    'Sandstorm.MxGraph'
+    '@controller': 'Standard'
+    '@format':     'html'
+    '@action':     'index'
+  appendExceedingArguments: TRUE

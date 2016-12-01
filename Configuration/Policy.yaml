@@ -1,0 +1,15 @@
+privilegeTargets:
+
+# We allow access to "everybody" to the Registration process, as well as login and also logout, because otherwise a user
+# that has no roles yet cannot logout anymore.
+
+  'TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
+    'Sandstorm.MxGraph:Editor':
+      matcher: 'method(Sandstorm\MxGraph\Controller\StandardController->(?!initialize).*Action())'
+
+roles:
+  'TYPO3.Flow:Everybody':
+    privileges:
+      -
+        privilegeTarget: 'Sandstorm.MxGraph:Editor'
+        permission: GRANT
