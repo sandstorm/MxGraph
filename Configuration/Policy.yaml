@@ -5,7 +5,7 @@ privilegeTargets:
 
   'TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
     'Sandstorm.MxGraph:Editor':
-      matcher: 'method(Sandstorm\MxGraph\Controller\StandardController->(?!initialize).*Action())'
+      matcher: 'method(Sandstorm\MxGraph\Controller\DiagramEditorController->(?!initialize).*Action())'
 
 roles:
   'TYPO3.Flow:Everybody':
