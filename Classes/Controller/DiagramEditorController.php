@@ -4,7 +4,9 @@ namespace Sandstorm\MxGraph\Controller;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\Controller\ActionController;
 use TYPO3\Flow\Resource\ResourceManager;
+use TYPO3\Media\Domain\Model\Asset;
 use TYPO3\Media\Domain\Model\Image;
+use TYPO3\Media\Domain\Model\ImageInterface;
 use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 
 class DiagramEditorController extends ActionController
@@ -26,19 +28,26 @@ class DiagramEditorController extends ActionController
     }
 
     /**
-     * @param NodeInterface $filename
+     * @param NodeInterface $node
      * @param string $xml
      * @param string $svg
      * @Flow\SkipCsrfProtection
      */
-    public function saveAction(NodeInterface $filename, $xml, $svg)
+    public function saveAction(NodeInterface $node, $xml, $svg)
     {
-        $filename->setProperty('diagramSource', $xml);
+        $node->setProperty('diagramSource', $xml);
 
         $persistentResource = $this->resourceManager->importResourceFromContent($svg, 'diagram.svg');
-        $image = new Image($persistentResource);
-        $filename->setProperty('image', $image);
 
-        return "OK";
+        $image = $node->getProperty('image');
+        if ($image instanceof Asset) {
+            $image->setResource($persistentResource);
+        } else {
+            $image = new Image($persistentResource);
+        }
+
+        $node->setProperty('image', $image);
+
+        return 'OK';
     }
 }
