@@ -22,7 +22,12 @@
 
 then, enjoy :-)
 
-### License
+## Next Steps
+
+* support customizing the diagram editor; e.g. by making styles configurable
+* add a version for Neos Master
+
+## License
 
 GPL v3
 
