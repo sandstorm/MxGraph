@@ -3,7 +3,7 @@
   uriPattern:    'neos/mxgraph(/{@action})'
   defaults:
     '@package':    'Sandstorm.MxGraph'
-    '@controller': 'Standard'
+    '@controller': 'DiagramEditor'
     '@format':     'html'
     '@action':     'index'
   appendExceedingArguments: TRUE

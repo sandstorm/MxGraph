@@ -1,13 +1,13 @@
 {
-    "description": "",
-    "type": "neos-package",
+    "description": "Integrate MXGraph / Draw.io into Neos as Node Type for creating interactive diagrams and flowcharts",
+    "type": "neos-plugin",
     "name": "sandstorm/mxgraph",
     "require": {
-        "typo3/flow": "*"
+        "typo3/neos": "<=2.3.9999"
     },
     "autoload": {
-        "psr-0": {
-            "Sandstorm\\MxGraph": "Classes/"
+        "psr-4": {
+            "Sandstorm\\MxGraph\\": "Classes/"
         }
     },
     "extra": {

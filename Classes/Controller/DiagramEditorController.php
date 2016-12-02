@@ -7,7 +7,7 @@ use TYPO3\Flow\Resource\ResourceManager;
 use TYPO3\Media\Domain\Model\Image;
 use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 
-class StandardController extends ActionController
+class DiagramEditorController extends ActionController
 {
 
     /**
