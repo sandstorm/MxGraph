@@ -68,12 +68,9 @@
       var editorUi = new EditorUi(editor);
 
       var doc = mxUtils.parseXml(window.DIAGRAM_CONTENTS);
-      var model = new mxGraphModel();
       var codec = new mxCodec(doc);
-      codec.decode(doc.documentElement, model);
+      codec.decode(doc.documentElement, editor.graph.getModel());
 
-      var children = model.getChildren(model.getChildAt(model.getRoot(), 0));
-      editor.graph.importCells(children);
       editor.filename = window.DIAGRAM_NODE;
 
       editorUi.save = function(nodePath) {
