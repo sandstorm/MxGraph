@@ -4,9 +4,9 @@ namespace Sandstorm\MxGraph\Controller;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\ResourceManagement\ResourceManager;
-use TYPO3\Media\Domain\Model\Asset;
-use TYPO3\Media\Domain\Model\Image;
-use TYPO3\Media\Domain\Model\ImageInterface;
+use Neos\Media\Domain\Model\Asset;
+use Neos\Media\Domain\Model\Image;
+use Neos\Media\Domain\Model\ImageInterface;
 use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 
 class DiagramEditorController extends ActionController
