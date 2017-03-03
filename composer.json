@@ -13,6 +13,9 @@
     "extra": {
         "neos": {
             "package-key": "Sandstorm.MxGraph"
-        }
+        },
+        "applied-flow-migrations": [
+            "TYPO3.FLOW3-201201261636"
+        ]
     }
 }
