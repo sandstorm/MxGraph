@@ -1,12 +1,4 @@
 
-TYPO3:
-  Neos:
-    typoScript:
-      autoInclude:
-        Sandstorm.MxGraph: true
-    userInterface:
-      requireJsPathMapping:
-        Sandstorm.MxGraph/Editors: 'resource://Sandstorm.MxGraph/Public/Scripts/Inspector/Editors'
 Neos:
   Flow:
     mvc:
@@ -21,3 +13,10 @@ Neos:
                 pattern: ControllerObjectName
                 patternOptions:
                   controllerObjectNamePattern: 'Sandstorm\MxGraph\Controller\.*'
+  Neos:
+    typoScript:
+      autoInclude:
+        Sandstorm.MxGraph: true
+    userInterface:
+      requireJsPathMapping:
+        Sandstorm.MxGraph/Editors: 'resource://Sandstorm.MxGraph/Public/Scripts/Inspector/Editors'
