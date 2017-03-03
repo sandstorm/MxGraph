@@ -1,24 +1,23 @@
+
 TYPO3:
+  Neos:
+    typoScript:
+      autoInclude:
+        Sandstorm.MxGraph: true
+    userInterface:
+      requireJsPathMapping:
+        Sandstorm.MxGraph/Editors: 'resource://Sandstorm.MxGraph/Public/Scripts/Inspector/Editors'
+Neos:
   Flow:
     mvc:
       routes:
-        'Sandstorm.MxGraph': true
-
+        Sandstorm.MxGraph: true
     security:
       authentication:
         providers:
           Typo3BackendProvider:
             requestPatterns:
               'Sandstorm.MxGraph:backend':
-                pattern: 'ControllerObjectName'
+                pattern: ControllerObjectName
                 patternOptions:
                   controllerObjectNamePattern: 'Sandstorm\MxGraph\Controller\.*'
-
-  Neos:
-    typoScript:
-      autoInclude:
-        'Sandstorm.MxGraph': TRUE
-
-    userInterface:
-      requireJsPathMapping:
-        'Sandstorm.MxGraph/Editors': 'resource://Sandstorm.MxGraph/Public/Scripts/Inspector/Editors'
