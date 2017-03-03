@@ -2,7 +2,7 @@
 'Sandstorm.MxGraph:Diagram':
   superTypes:
     'TYPO3.Neos:Content': true
-    'TYPO3.Neos.NodeTypes:ContentImageMixin': true
+    'Neos.NodeTypes:ContentImageMixin': true
   ui:
     label: Diagram
     icon: icon-picture
