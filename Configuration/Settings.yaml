@@ -14,9 +14,9 @@ Neos:
                 patternOptions:
                   controllerObjectNamePattern: 'Sandstorm\MxGraph\Controller\.*'
   Neos:
-    typoScript:
-      autoInclude:
-        Sandstorm.MxGraph: true
     userInterface:
       requireJsPathMapping:
         Sandstorm.MxGraph/Editors: 'resource://Sandstorm.MxGraph/Public/Scripts/Inspector/Editors'
+    fusion:
+      autoInclude:
+        Sandstorm.MxGraph: true
