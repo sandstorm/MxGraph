@@ -17,8 +17,8 @@
 
 ## How to install
 
-* Neos 2.3: `composer install sandstorm/mxgraph` - Version 1.x
-* Neos Master (not yet supported)
+* Neos 2.3: `composer install sandstorm/mxgraph 1.0` - Version 1.x
+* Neos 3.x (including react UI): `composer install sandstorm/mxgraph` - Version 2.x
 
 then, enjoy :-)
 

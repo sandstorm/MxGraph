@@ -20,3 +20,9 @@ Neos:
     fusion:
       autoInclude:
         Sandstorm.MxGraph: true
+
+    Ui:
+      resources:
+        javascript:
+          'Sandstorm.MxGraph:MxGraph':
+            resource: resource://Sandstorm.MxGraph/Public/MxGraph/Plugin.js

@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "build": "neos-react-scripts build",
+    "watch": "neos-react-scripts watch"
+  },
+  "devDependencies": {
+    "@neos-project/neos-ui-extensibility": "^1.0.0"
+  },
+  "neos": {
+    "buildTargetDirectory": "../../../Public/MxGraph"
+  },
+  "dependencies": {
+  }
+}
