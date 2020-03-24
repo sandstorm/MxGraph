@@ -1,4 +1,4 @@
-prototype(Sandstorm.MxGraph:Diagram) {
+prototype(Sandstorm.MxGraph:Diagram) < prototype(Neos.Neos:Content) {
     templatePath = 'resource://Sandstorm.MxGraph/Private/Templates/Image/Image.html'
 
     maximumWidth = 2560
