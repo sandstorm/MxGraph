@@ -13,5 +13,6 @@ prototype(Sandstorm.MxGraph:Diagram) < prototype(Neos.Neos:Content) {
       forceConversion = true
     }
     title = ${q(node).property('title') ? q(node).property('title') : q(node).property('image').title}
+    image = ${q(node).property('image')}
     caption = ${String.trim(String.stripTags(q(node).property('caption'))) ? q(node).property('caption') : q(node).property('image').caption}
 }
