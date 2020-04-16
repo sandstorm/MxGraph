@@ -12,8 +12,8 @@
     window.STYLE_PATH = '{f:uri.resource(path:"vendor/mxgraph/styles", localize: false)}';
     window.STENCIL_PATH = '{f:uri.resource(path:"vendor/mxgraph/stencils", localize: false)}';
     window.SAVE_URL = '{f:uri.action(action: "save")}';
-    window.DIAGRAM_CONTENTS = '{diagram -> f:format.raw()}';
-    window.DIAGRAM_NODE = '{diagramNode -> f:format.raw()}';
+    window.DIAGRAM_CONTENTS = {diagram -> f:format.json() -> f:format.raw()};
+    window.DIAGRAM_NODE = {diagramNode -> f:format.json() -> f:format.raw()};
 
     // Default resources are included in grapheditor resources
     mxLoadResources = false;
