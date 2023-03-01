@@ -1,9 +1,9 @@
 {
-    "description": "Integrate MXGraph / Draw.io into Neos as Node Type for creating interactive diagrams and flowcharts",
+    "description": "Integrate Diagrams.net / Draw.io into Neos as Node Type for creating interactive diagrams and flowcharts",
     "type": "neos-plugin",
     "name": "sandstorm/mxgraph",
     "require": {
-        "neos/neos": ">=3.0.0 || dev-master",
+        "neos/neos": ">=7.0.0 || dev-master",
         "neos/nodetypes-basemixins": ">=3.0.0 || dev-master"
     },
     "autoload": {

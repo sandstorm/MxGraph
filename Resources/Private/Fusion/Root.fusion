@@ -1,4 +1,8 @@
 prototype(Sandstorm.MxGraph:Diagram) < prototype(Neos.Neos:Content) {
+    // BACKWARDS COMPATIBILITY: to get the old (2.x) behavior back, set to false.
+    renderAsInlineSvg = true
+
+    // INTERNAL
     templatePath = 'resource://Sandstorm.MxGraph/Private/Templates/Image/Image.html'
 
     maximumWidth = 2560
@@ -14,5 +18,6 @@ prototype(Sandstorm.MxGraph:Diagram) < prototype(Neos.Neos:Content) {
     }
     title = ${q(node).property('title') ? q(node).property('title') : q(node).property('image').title}
     image = ${q(node).property('image')}
+    diagramSvgText = ${q(node).property('diagramSvgText')}
     caption = ${String.trim(String.stripTags(q(node).property('caption'))) ? q(node).property('caption') : q(node).property('image').caption}
 }

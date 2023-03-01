@@ -19,13 +19,55 @@ class DiagramEditorController extends ActionController
     protected $resourceManager;
 
     /**
+     * @Flow\InjectConfiguration(path="drawioEmbedUrl")
+     * @var string
+     */
+    protected $drawioEmbedUrl;
+    const LOCAL_DRAWIO_EMBED_URL = 'LOCAL';
+
+    /**
+     * @Flow\InjectConfiguration(path="drawioEmbedParameters")
+     * @var array
+     */
+    protected $drawioEmbedParameters;
+
+    /**
+     * @Flow\InjectConfiguration(path="drawioConfiguration")
+     * @var array
+     */
+    protected $drawioConfiguration;
+
+
+    /**
      * @param NodeInterface $diagramNode
      */
     public function indexAction(NodeInterface $diagramNode)
     {
+        $drawioEmbedUrlWithParameters = $this->drawioEmbedUrl;
+        if ($drawioEmbedUrlWithParameters === self::LOCAL_DRAWIO_EMBED_URL) {
+            $drawioEmbedUrlWithParameters = $this->uriBuilder->uriFor('offlineLocalDiagramsNet');
+        }
+        $drawioEmbedParameters = $this->drawioEmbedParameters;
+        // these parameters must be hard-coded; otherwise our application won't work
+        $drawioEmbedParameters['embed'] = '1';
+        $drawioEmbedParameters['configure'] = '1';
+        $drawioEmbedParameters['proto'] = 'json';
+
+        $drawioEmbedUrlWithParameters .= '?' .  http_build_query($drawioEmbedParameters);
+
         $this->view->assign('diagram', $diagramNode->getProperty('diagramSource'));
         $this->view->assign('diagramNode', $diagramNode->getContextPath());
+        $this->view->assign('drawioEmbedUrlWithParameters', $drawioEmbedUrlWithParameters);
+        $this->view->assign('drawioConfiguration', is_array($this->drawioConfiguration) ? $this->drawioConfiguration : []);
+
     }
+
+    /**
+     */
+    public function offlineLocalDiagramsNetAction()
+    {
+    }
+
 
     /**
      * @param NodeInterface $node
@@ -35,18 +77,31 @@ class DiagramEditorController extends ActionController
      */
     public function saveAction(NodeInterface $node, $xml, $svg)
     {
-        $node->setProperty('diagramSource', $xml);
 
+        if (empty($svg)) {
+            // XML without SVG -> autosaved - not supported right now.
+            $node->setProperty('diagramSourceAutosaved', $xml);
+            throw new \RuntimeException("TODO - autosave not supported right now.");
+        }
+
+        $node->setProperty('diagramSource', $xml);
+        // NEW since version 3.0.0
+        $node->setProperty('diagramSvgText', $svg);
+
+        // BEGIN DEPRECATION since version 3.0.0
         $persistentResource = $this->resourceManager->importResourceFromContent($svg, 'diagram.svg');
 
         $image = $node->getProperty('image');
         if ($image instanceof Asset) {
+            // BUG: this also changes the live workspace - nasty. But if we remove it, we get 1000s of assets
+            // cluttering the Media UI.
             $image->setResource($persistentResource);
         } else {
             $image = new Image($persistentResource);
         }
 
         $node->setProperty('image', $image);
+        // END DEPRECATION since version 3.0.0
 
         return 'OK';
     }

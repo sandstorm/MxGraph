@@ -28,9 +28,15 @@
     </f:if>
   </figure>
 </div>
-
 <f:section name="imageRendering">
-  <media:image image="{image}" alt="{alternativeText}" title="{title}" width="{width}"
-         maximumWidth="{maximumWidth}" height="{height}" maximumHeight="{maximumHeight}"
-         allowUpScaling="{allowUpScaling}" allowCropping="{allowCropping}" />
+  <f:if condition="{renderAsInlineSvg}">
+    <f:then>
+      {diagramSvgText -> f:format.raw()}
+    </f:then>
+    <f:else>
+      <media:image image="{image}" alt="{alternativeText}" title="{title}" width="{width}"
+                   maximumWidth="{maximumWidth}" height="{height}" maximumHeight="{maximumHeight}"
+                   allowUpScaling="{allowUpScaling}" allowCropping="{allowCropping}" />
+    </f:else>
+  </f:if>
 </f:section>

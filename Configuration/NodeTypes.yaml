@@ -8,10 +8,14 @@
     icon: icon-picture
     position: 300
   properties:
+    # DEPRECATED with version 3
     image:
       ui:
         reloadIfChanged: true
         inspector: null
+    # BEGINNING with version 3
+    diagramSvgText:
+      type: string
     diagramSource:
       ui:
         inspector:

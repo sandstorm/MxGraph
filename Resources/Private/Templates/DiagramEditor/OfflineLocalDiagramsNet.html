@@ -1,0 +1,123 @@
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=5,IE=9"><![endif]--><!DOCTYPE html>
+<html>
+<head>
+  <title>Diagram Editor</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="../../../Public/vendor/drawio/styles/grapheditor.css">
+  <link rel="stylesheet" type="text/css" href="../../../Public/vendor/drawio/mxgraph/css/common.css">
+  <script type="text/javascript">
+    var t0 = new Date();
+    window.RESOURCES_PATH = '{f:uri.resource(path:"vendor/drawio/resources", localize: false)}';
+    window.IMAGE_PATH = '{f:uri.resource(path:"vendor/drawio/images", localize: false)}';
+    window.STYLE_PATH = '{f:uri.resource(path:"vendor/drawio/styles", localize: false)}';
+
+    mxLoadStylesheets = false;
+
+
+
+    // See draw.io: PreConfig.js
+    // Overrides of global vars need to be pre-loaded
+    window.DRAWIO_BASE_URL = '{f:uri.resource(path:"vendor/drawio/", localize: false)}'; // Replace with path to base of deployment, e.g. https://www.example.com/folder
+
+    window.urlParams = (function()
+    {
+      var result = new Object();
+      var params = window.location.search.slice(1).split('&');
+
+      for (var i = 0; i < params.length; i++)
+      {
+        var idx = params[i].indexOf('=');
+
+        if (idx > 0)
+        {
+          result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
+        }
+      }
+
+      return result;
+    })();
+
+    /*urlParams = {};
+    //urlParams['sync'] = 'manual';
+    // disable realtime
+    urlParams['offline'] = '1';
+    urlParams['embed'] = '1';
+    urlParams['proto'] = 'json';
+    urlParams['configure'] = '1';
+    //urlParams['test'] = '1';
+    // use the most modern UI
+    urlParams['ui'] = 'simple';*/
+
+    // math support is large, so we strip it for local dev
+    window.urlParams['math'] = '0';
+
+
+    /**
+     * Synchronously adds scripts to the page.
+     */
+    function mxscript(src, onLoad, id, dataAppKey, noWrite)
+    {
+      src =  window.DRAWIO_BASE_URL + src;
+
+      var defer = onLoad == null && !noWrite;
+
+      if ((urlParams['dev'] != '1' && typeof document.createElement('canvas').getContext === "function") ||
+        onLoad != null || noWrite)
+      {
+        var s = document.createElement('script');
+        s.setAttribute('type', 'text/javascript');
+        s.setAttribute('defer', 'true');
+        s.setAttribute('src', src);
+
+        if (id != null)
+        {
+          s.setAttribute('id', id);
+        }
+
+        if (dataAppKey != null)
+        {
+          s.setAttribute('data-app-key', dataAppKey);
+        }
+
+        if (onLoad != null)
+        {
+          var r = false;
+
+          s.onload = s.onreadystatechange = function()
+          {
+            if (!r && (!this.readyState || this.readyState == 'complete'))
+            {
+              r = true;
+              onLoad();
+            }
+          };
+        }
+
+        var t = document.getElementsByTagName('script')[0];
+
+        if (t != null)
+        {
+          t.parentNode.insertBefore(s, t);
+        }
+      }
+      else
+      {
+        document.write('<script src="' + src + '"' + ((id != null) ? ' id="' + id +'" ' : '') +
+          ((dataAppKey != null) ? ' data-app-key="' + dataAppKey +'" ' : '') + '></scr' + 'ipt>');
+      }
+    };
+
+  </script>
+  <script type="text/javascript" src="../../../Public/vendor/drawio/js/app.min.js"></script>
+</head>
+<body class="geEditor">
+<script type="text/javascript">
+  <![CDATA[
+  Editor.enableServiceWorker = false;
+  App.main();
+  ]]>
+</script>
+</body>
+</html>

@@ -1,105 +1,23 @@
-<!--[if IE]>
-<meta http-equiv="X-UA-Compatible" content="IE=5,IE=9"><![endif]--><!DOCTYPE html>
 <html>
 <head>
-  <title>Diagram Editor</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="../../../Public/vendor/mxgraph/styles/grapheditor.css">
-  <script type="text/javascript">
-    window.mxBasePath = '{f:uri.resource(path:"vendor/mxgraph/", localize: false)}';
-    window.RESOURCES_PATH = '{f:uri.resource(path:"vendor/mxgraph/resources", localize: false)}';
-    window.STYLE_PATH = '{f:uri.resource(path:"vendor/mxgraph/styles", localize: false)}';
-    window.STENCIL_PATH = '{f:uri.resource(path:"vendor/mxgraph/stencils", localize: false)}';
+  <style>
+    .diagramIframe {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      left: 0;
+      top: 0;
+      border: 0;
+    }
+  </style>
+  <script>
     window.SAVE_URL = '{f:uri.action(action: "save")}';
     window.DIAGRAM_CONTENTS = {diagram -> f:format.json() -> f:format.raw()};
     window.DIAGRAM_NODE = {diagramNode -> f:format.json() -> f:format.raw()};
-
-    // Default resources are included in grapheditor resources
-    mxLoadResources = false;
+    window.DRAWIO_CONFIGURATION = {drawioConfiguration -> f:format.json() -> f:format.raw()};
   </script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Init.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/jscolor/jscolor.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/sanitizer/sanitizer.min.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/mxClient.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/EditorUi.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Editor.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Sidebar.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Graph.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Shapes.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Actions.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Menus.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Format.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Toolbar.js"></script>
-  <script type="text/javascript" src="../../../Public/vendor/mxgraph/js/Dialogs.js"></script>
+  <script src="../../../Public/mainFrame.js"></script>
 </head>
-<body class="geEditor">
-<script type="text/javascript">
-<![CDATA[
-  // Extends EditorUi to update I/O action states based on availability of backend
-  (function() {
-    var editorUiInit = EditorUi.prototype.init;
-
-    EditorUi.prototype.init = function() {
-      editorUiInit.apply(this, arguments);
-      this.actions.get('export').setEnabled(false);
-
-      this.actions.get('open').setEnabled(false);
-      this.actions.get('import').setEnabled(false);
-      this.actions.get('saveAs').setEnabled(false);
-    };
-
-    // Adds required resources (disables loading of fallback properties, this can only
-    // be used if we know that all keys are defined in the language specific file)
-    mxResources.loadDefaultBundle = false;
-    var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
-      mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
-
-    // Fixes possible asynchronous requests
-    mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr) {
-      // Adds bundle text to resources
-      mxResources.parse(xhr[0].getText());
-
-      // Configures the default graph theme
-      var themes = new Object();
-      themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
-
-      // Main
-      var editor = new Editor(false, themes);
-      var editorUi = new EditorUi(editor);
-
-      var doc = mxUtils.parseXml(window.DIAGRAM_CONTENTS);
-      var codec = new mxCodec(doc);
-      codec.decode(doc.documentElement, editor.graph.getModel());
-
-      editor.filename = window.DIAGRAM_NODE;
-
-      editorUi.save = function(nodePath) {
-        if (this.editor.graph.isEditing()) {
-          this.editor.graph.stopEditing();
-        }
-
-        var xml = mxUtils.getXml(this.editor.getGraphXml());
-        var svg = mxUtils.getXml(this.editor.graph.getSvg('#FFFFFF', 1, 10));
-
-        var _that = this;
-        new mxXmlRequest(window.SAVE_URL, 'xml=' + encodeURIComponent(xml) + '&node=' +
-          encodeURIComponent(nodePath) + '&svg=' + encodeURIComponent(svg)).send(function() {
-          if (window.opener && window.opener.Typo3Neos && window.opener.Typo3Neos.Content) {
-            window.opener.Typo3Neos.Content.reloadPage();
-          }
-
-          _that.editor.setModified(false);
-          document.title = 'Saved Diagram!';
-        });
-      };
-
-    }, function() {
-      document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
-    });
-
-  })();
-]]>
-</script>
-</body>
+<!--<iframe src="https://embed.diagrams.net/?embed=1&configure=1&proto=json&ui=simple&lockdown=1&stealth=1&offline=1" class="diagramIframe" id="diagramIframe"></iframe>-->
+<iframe src="{drawioEmbedUrlWithParameters}" class="diagramIframe" id="diagramIframe"></iframe>
 </html>

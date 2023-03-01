@@ -1,3 +1,60 @@
+Sandstorm:
+  MxGraph:
+    # Pointer to running instance of https://embed.diagrams.net.
+    # Optionally, you can use the special string "LOCAL" here,
+    # which then uses the locally-bundled version inside the package.
+    drawioEmbedUrl: LOCAL
+    # for extra URL parameters, see https://www.diagrams.net/doc/faq/embed-mode and https://www.diagrams.net/doc/faq/supported-url-parameters
+    drawioEmbedParameters:
+      # Use the modern UI theme. the other themes are [listed here](https://www.diagrams.net/doc/faq/editor-theme-change)
+      ui: simple
+      # Ensure no data is transmitted to external services. [see this explanation](https://www.diagrams.net/blog/data-governance-lockdown)
+      lockdown: 1
+      # Disables all features that require external web services (such as PDF export).
+      stealth: 1
+      # if enabled, debug logs are printed to the console.
+      #test: 1
+      # disables MathML support. (MathML is disabled for fully-disconnected mode; because it would grow the Neos package considerably).
+      math: 0
+
+    # You can configure the diagram editor as explained here: https://www.diagrams.net/doc/faq/configure-diagram-editor
+    # !! lots of options possible - see docs for details.
+    #drawioConfiguration:
+    #  customFonts:
+    #    - fontFamily: Work Sans
+    #      fontUrl: https://fonts.googleapis.com/css?family=Work+Sans
+    #  # Colour codes to be added before presetColors (no leading # for the colour codes, null for a blank entry)
+    #  customPresetColors:
+    #    - '26224C'
+    #    - '00ADEE'
+    #  # colorNames: Names for colors, eg. {‘FFFFFF’: ‘White’, ‘000000’: ‘Black’} that are used as tooltips (uppercase, no leading # for the colour codes).
+    #  colorNames:
+    #    26224C: Neos Dark Blue
+    #    00ADEE: Neos Light Blue
+    #
+    #  # Available colour schemes in the style section at the top of the format panel (use leading # for the colour codes).
+    #  # Possible colour keys are fill, stroke, gradient and font (font is ignored for connectors). An optional title can
+    #  # be added to be used as a tooltip. An optional border can be added to define the CSS for the border width and type,
+    #  # eg. ‘2px solid’ or ‘3px dashed’ (only setting the border width is not valid, the border type must be included).
+    #  customColorSchemes:
+    #    # !! the 1st array level is the **page**, then come the entries.
+    #    -
+    #      - title: Neos Light Blue solid
+    #        fill: '#00ADEE'
+    #        stroke: white
+    #        border: 1px solid
+    #        font: white
+    #      - title: Neos Dark Blue solid
+    #        fill: '#26224C'
+    #        stroke: white
+    #        border: 1px solid
+    #        font: white
+    #      - title: Neos Light Blue border
+    #        fill: '#ffffff'
+    #        stroke: '#00ADEE'
+    #        border: 2px solid
+    #        font: '#00ADEE'
+
 
 Neos:
   Flow:
@@ -14,9 +71,6 @@ Neos:
                 patternOptions:
                   controllerObjectNamePattern: 'Sandstorm\MxGraph\Controller\.*'
   Neos:
-    userInterface:
-      requireJsPathMapping:
-        Sandstorm.MxGraph/Editors: 'resource://Sandstorm.MxGraph/Public/Scripts/Inspector/Editors'
     fusion:
       autoInclude:
         Sandstorm.MxGraph: true
