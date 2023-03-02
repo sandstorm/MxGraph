@@ -4,7 +4,8 @@
     "watch": "neos-react-scripts watch"
   },
   "devDependencies": {
-    "@neos-project/neos-ui-extensibility": "^1.0.0"
+    "@neos-project/build-essentials": "8.2.3",
+    "@neos-project/neos-ui-extensibility": "8.2.3"
   },
   "neos": {
     "buildTargetDirectory": "../../../Public/MxGraph"

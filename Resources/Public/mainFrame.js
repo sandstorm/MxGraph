@@ -1,9 +1,7 @@
 let diagramIframe;
 window.addEventListener('DOMContentLoaded', () => {
     diagramIframe = document.getElementById('diagramIframe');
-})
-
-;
+});
 
 (function() {
 // Modeled after https://github.com/jgraph/drawio-integration/blob/master/diagram-editor.js
@@ -38,9 +36,20 @@ window.addEventListener('DOMContentLoaded', () => {
         if (msg.event === 'configure') {
             postMessageToDrawioIframe({action: 'configure', config: window.DRAWIO_CONFIGURATION});
         } else if (msg.event == 'init') {
-            // TODO: autosave is disabled for now, as we need to export on every save.
-            postMessageToDrawioIframe({action: 'load', autosave: 0, saveAndExit: '1',
-                modified: 'unsavedChanges', xml: window.DIAGRAM_CONTENTS});
+            if (window.location.hash === "#import") {
+                // if the import is triggered, we directly trigger an export (to ensure the file is converted into
+                // something we can read)
+                // TODO: autosave is disabled for now, as we need to export on every save.
+                postMessageToDrawioIframe({action: 'load', autosave: 0, saveAndExit: '1',
+                    modified: 'unsavedChanges', xml: window.opener.SandstormMxGraphApiImport});
+                postMessageToDrawioIframe({
+                    action: 'export', format: "svg",
+                });
+            } else {
+                // TODO: autosave is disabled for now, as we need to export on every save.
+                postMessageToDrawioIframe({action: 'load', autosave: 0, saveAndExit: '1',
+                    modified: 'unsavedChanges', xml: window.DIAGRAM_CONTENTS});
+            }
         } else if (msg.event == 'autosave') {
             const formData = new FormData();
             formData.append("node", window.DIAGRAM_NODE);
@@ -75,8 +84,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         body: formData
                     }).then(() => {
                         postMessageToDrawioIframe({action: 'status', messageKey: 'allChangesSaved', modified: false});
-                        if (window.opener && window.opener.Typo3Neos && window.opener.Typo3Neos.Content) {
-                            window.opener.Typo3Neos.Content.reloadPage();
+                        if (window.opener && window.opener.SandstormMxGraphApi) {
+                            window.opener.SandstormMxGraphApi.reloadPage();
                         }
 
                         if (shouldExitAfterNextExport) {
