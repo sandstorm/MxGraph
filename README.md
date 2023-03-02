@@ -43,6 +43,8 @@ prototype(Sandstorm.MxGraph:Diagram) {
 }
 ```
 
+You need to open and save diagrams created with version <= 2.X to render them as inline SVGs, because the
+internal storage format of the Node changed to enable this functionality (and this is only re-written on save).
 
 ## Custom Draw.io Configuration
 

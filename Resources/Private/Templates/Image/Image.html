@@ -29,7 +29,7 @@
   </figure>
 </div>
 <f:section name="imageRendering">
-  <f:if condition="{renderAsInlineSvg}">
+  <f:if condition="{renderAsInlineSvg} && {diagramSvgText}">
     <f:then>
       {diagramSvgText -> f:format.raw()}
     </f:then>
