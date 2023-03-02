@@ -20,6 +20,7 @@
 * (new since 3.x) customization of diagrams.net editor possible
 * (new since 3.x, optional) auto-updates can be enabled by using embed.diagrams.net
 * (new since 3.x) renders diagram as embedded SVG; so you can f.e. click links
+* (new since 3.x) Import .drawio, .svg, .png files
 
 ## How to install
 
@@ -96,7 +97,15 @@ Sandstorm:
 
 ```
 
-## Implementation Concept
+## Importing files
+
+In the inspector, there is a button to import a drawio file. This works for:
+
+- .drawio files
+- .drawio.png files (PNG files where the diagram is embedded)
+- .drawio.svg files (SVG files where the diagram is embedded)
+
+## Further Customization of embed mode via URL parameters
 
 Until version <= 2.x, we've used a repository https://github.com/jgraph/mxgraph as basis. This has been discontinued
 at 9.11.2020; and the code has been merged into https://github.com/jgraph/drawio/tree/dev/src/main/webapp.
