@@ -3,6 +3,9 @@
   superTypes:
     'Neos.Neos:Content': true
     'Neos.NodeTypes.BaseMixins:ContentImageMixin': true
+  options:
+    nodeCreationHandlers:
+      - nodeCreationHandler: Sandstorm\MxGraph\DiagramCreationHandler
   ui:
     label: Diagram
     icon: icon-picture
@@ -21,3 +24,19 @@
         inspector:
           editor: Sandstorm.MxGraph/Editors/DiagramEditor
           group: image
+    # BEGINNING with version 3.1
+    diagramIdentifier:
+      type: string
+      ui:
+        label: i18n
+        # if the diagram Identifier changed, the DiagramNodeHandler might have updated diagramSvgText and diagramSource; thus we need to refresh.
+        reloadIfChanged: true
+        inspector:
+          group: image
+          editor: 'Sandstorm.LazyDataSource/Inspector/Editors/DataSourceSelectEditor'
+          editorOptions:
+            placeholder: Create new or select ...
+            dataSourceIdentifier: drawio-diagram-identifier
+            dataSourceDisableCaching: true
+        help:
+          message: i18n

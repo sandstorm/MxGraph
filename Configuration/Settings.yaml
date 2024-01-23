@@ -71,6 +71,10 @@ Neos:
                 patternOptions:
                   controllerObjectNamePattern: 'Sandstorm\MxGraph\Controller\.*'
   Neos:
+    userInterface:
+      translation:
+        autoInclude:
+          'Sandstorm.MxGraph': ['NodeTypes/*']
     fusion:
       autoInclude:
         Sandstorm.MxGraph: true

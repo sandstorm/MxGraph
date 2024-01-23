@@ -6,8 +6,9 @@ use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\Image;
-use Neos\Media\Domain\Model\ImageInterface;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Sandstorm\MxGraph\DiagramIdentifierSearchService;
+use Sandstorm\MxGraph\Domain\Model\Diagram;
 
 class DiagramEditorController extends ActionController
 {
@@ -17,6 +18,12 @@ class DiagramEditorController extends ActionController
      * @var ResourceManager
      */
     protected $resourceManager;
+
+    /**
+     * @Flow\Inject
+     * @var DiagramIdentifierSearchService
+     */
+    protected $diagramIdentifierSearchService;
 
     /**
      * @Flow\InjectConfiguration(path="drawioEmbedUrl")
@@ -87,6 +94,15 @@ class DiagramEditorController extends ActionController
         $node->setProperty('diagramSource', $xml);
         // NEW since version 3.0.0
         $node->setProperty('diagramSvgText', $svg);
+
+        $diagramIdentifier = $node->getProperty('diagramIdentifier');
+        if (!empty($diagramIdentifier)) {
+            // also update related diagrams
+            foreach ($this->diagramIdentifierSearchService->findRelatedDiagramsWithIdentifierExcludingOwn($diagramIdentifier, $node) as $relatedDiagramNode) {
+                $relatedDiagramNode->setProperty('diagramSource', $xml);
+                $relatedDiagramNode->setProperty('diagramSvgText', $svg);
+            }
+        }
 
         // BEGIN DEPRECATION since version 3.0.0
         $persistentResource = $this->resourceManager->importResourceFromContent($svg, 'diagram.svg');

@@ -49,6 +49,32 @@ function sync-drawio-offline-source() {
 
 }
 
+function clean() {
+  rm -Rf Resources/Private/JavaScript/MxGraph/node_modules
+}
+
+function setup() {
+  cd Resources/Private/JavaScript/MxGraph
+  yarn install
+}
+
+function watch() {
+  # https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+  export NODE_OPTIONS=--openssl-legacy-provider
+
+  cd Resources/Private/JavaScript/MxGraph
+  yarn run watch
+}
+
+function build() {
+  # https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+  export NODE_OPTIONS=--openssl-legacy-provider
+
+  cd Resources/Private/JavaScript/MxGraph
+  yarn run build
+}
+
+
 ####### Utilities #######
 
 _log_success() {

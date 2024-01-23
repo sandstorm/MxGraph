@@ -4,7 +4,8 @@
     "name": "sandstorm/mxgraph",
     "require": {
         "neos/neos": ">=7.0.0 || dev-master",
-        "neos/nodetypes-basemixins": ">=3.0.0 || dev-master"
+        "neos/nodetypes-basemixins": ">=3.0.0 || dev-master",
+        "sandstorm/lazydatasource": "^2.0.1"
     },
     "autoload": {
         "psr-4": {

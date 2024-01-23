@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="" product-name="Sandstorm.MxGraph" source-language="en" datatype="plaintext">
+    <body>
+      <trans-unit id="properties.diagramIdentifier" xml:space="preserve">
+        <source>Diagram Identifier</source>
+      </trans-unit>
+      <trans-unit id="properties.diagramIdentifier.ui.help.message" xml:space="preserve">
+        <source>All diagrams with the same Diagram Identifier are **updated in sync**.
+
+You can freely choose the Diagram Identifier, and get an autocomplete for existing Diagrams
+known to the system.
+        </source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
