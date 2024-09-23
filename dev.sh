@@ -21,11 +21,17 @@ function analyze-diagrams-net() {
 }
 
 function sync-drawio-offline-source() {
-  mkdir tmp
+  mkdir tmp || echo "tmp file exists"
   cd tmp
   if [ ! -d drawio ]; then
     git clone https://github.com/jgraph/drawio.git
   fi
+
+  cd drawio
+  # we pin a specific version
+  git checkout v20.8.23
+  cd ..
+
 
   rm -Rf ../Resources/Public/vendor/drawio
   mkdir -p ../Resources/Public/vendor/drawio
@@ -44,7 +50,7 @@ function sync-drawio-offline-source() {
   cp -R drawio/src/main/webapp/js/shapes-*.min.js ../Resources/Public/vendor/drawio/js/
   cp -R drawio/src/main/webapp/js/extensions.min.js ../Resources/Public/vendor/drawio/js/
   cp -R drawio/src/main/webapp/js/stencils.min.js ../Resources/Public/vendor/drawio/js/
-  cp -R drawio/src/main/webapp/resources/dia.txt ../Resources/Public/vendor/drawio/resources/dia.txt
+  cp -R drawio/src/main/webapp/resources/* ../Resources/Public/vendor/drawio/resources/
   cp -R drawio/src/main/webapp/images/ ../Resources/Public/vendor/drawio/images
 
 }
