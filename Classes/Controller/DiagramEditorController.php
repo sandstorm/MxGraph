@@ -7,6 +7,7 @@ use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\Image;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\Neos\Domain\Service\UserService;
 use Sandstorm\MxGraph\DiagramIdentifierSearchService;
 use Sandstorm\MxGraph\Domain\Model\Diagram;
 
@@ -18,6 +19,12 @@ class DiagramEditorController extends ActionController
      * @var ResourceManager
      */
     protected $resourceManager;
+
+    /**
+     * @Flow\Inject
+     * @var UserService
+     */
+    protected $userService;
 
     /**
      * @Flow\Inject
@@ -59,6 +66,42 @@ class DiagramEditorController extends ActionController
         $drawioEmbedParameters['embed'] = '1';
         $drawioEmbedParameters['configure'] = '1';
         $drawioEmbedParameters['proto'] = 'json';
+
+        $drawioLanguage = '';
+        $interfaceLanguage = $this->userService->getCurrentUser()?->getPreferences()->getInterfaceLanguage();
+        if ($interfaceLanguage === 'da') {
+            $drawioLanguage = 'da';
+        } elseif ($interfaceLanguage === 'de') {
+            $drawioLanguage = 'de';
+        } elseif ($interfaceLanguage === 'en') {
+            // default
+        } elseif ($interfaceLanguage === 'es') {
+            $drawioLanguage = 'es';
+        } elseif ($interfaceLanguage === 'fi') {
+            $drawioLanguage = 'fi';
+        } elseif ($interfaceLanguage === 'fr') {
+            $drawioLanguage = 'fr';
+        } elseif ($interfaceLanguage === 'km') {
+            // TODO: MISSING AS IT SEEMS
+        } elseif ($interfaceLanguage === 'lv') {
+            $drawioLanguage = 'lv';
+        } elseif ($interfaceLanguage === 'nl') {
+            $drawioLanguage = 'nl';
+        } elseif ($interfaceLanguage === 'no') {
+            $drawioLanguage = 'no';
+        } elseif ($interfaceLanguage === 'pl') {
+            $drawioLanguage = 'pl';
+        } elseif ($interfaceLanguage === 'pt-BR') {
+            $drawioLanguage = 'pt-br';
+        } elseif ($interfaceLanguage === 'ru') {
+            $drawioLanguage = 'ru';
+        } elseif ($interfaceLanguage === 'zh-CN') {
+            $drawioLanguage = 'zh';
+        }
+
+        if (!empty($drawioLanguage)) {
+            $drawioEmbedParameters['lang'] = $drawioLanguage;
+        }
 
         $drawioEmbedUrlWithParameters .= '?' .  http_build_query($drawioEmbedParameters);
 
