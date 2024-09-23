@@ -84,3 +84,6 @@ Neos:
         javascript:
           'Sandstorm.MxGraph:MxGraph':
             resource: resource://Sandstorm.MxGraph/Public/MxGraph/Plugin.js
+      changes:
+        types:
+          'Sandstorm.MxGraph:ReloadChangedState': Sandstorm\MxGraph\Changes\ReloadChangedState

@@ -1111,9 +1111,13 @@ var DiagramEditor = (_dec = (0, _reactRedux.connect)(function (state) {
         focusedNode: _neosUiReduxStore.selectors.CR.Nodes.focusedSelector(state),
         currentIframeUrl: (0, _plowJs.$get)('ui.contentCanvas.src', state)
     };
+}, {
+    persistChanges: _neosUiReduxStore.actions.Changes.persistChanges
 }), _dec(_class = class DiagramEditor extends _react.PureComponent {
     render() {
         var currentIframeUrl = this.props.currentIframeUrl;
+        var persistChanges = this.props.persistChanges;
+        var focusedNode = this.props.focusedNode;
 
         window.SandstormMxGraphApi = {
             reloadPage: function reloadPage() {
@@ -1128,6 +1132,13 @@ var DiagramEditor = (_dec = (0, _reactRedux.connect)(function (state) {
                         iframeWindow.location.href = iframeWindow.location.href;
                     }
                 });
+
+                // Trigger an updateWorkspaceInfo to ensure the publish button
+                // is up to date
+                persistChanges([{
+                    type: 'Sandstorm.MxGraph:ReloadChangedState',
+                    subject: (0, _plowJs.$get)('contextPath', focusedNode)
+                }]);
             }
         };
 

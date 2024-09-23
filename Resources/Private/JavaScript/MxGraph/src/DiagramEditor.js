@@ -1,16 +1,20 @@
 import React, {Fragment, PureComponent} from 'react';
 import {Button} from '@neos-project/react-ui-components';
-import {selectors} from '@neos-project/neos-ui-redux-store';
+import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {connect} from 'react-redux';
 import {$get} from 'plow-js';
 
 @connect(state => ({
     focusedNode: selectors.CR.Nodes.focusedSelector(state),
     currentIframeUrl: $get('ui.contentCanvas.src', state)
-}))
+}), {
+    persistChanges: actions.Changes.persistChanges
+})
 export default class DiagramEditor extends PureComponent {
     render() {
         const currentIframeUrl = this.props.currentIframeUrl;
+        const persistChanges = this.props.persistChanges;
+        const focusedNode = this.props.focusedNode;
 
         window.SandstormMxGraphApi = {
             reloadPage() {
@@ -25,6 +29,15 @@ export default class DiagramEditor extends PureComponent {
                         iframeWindow.location.href = iframeWindow.location.href;
                     }
                 });
+
+                // Trigger an updateWorkspaceInfo to ensure the publish button
+                // is up to date
+                persistChanges([
+                    {
+                        type: 'Sandstorm.MxGraph:ReloadChangedState',
+                        subject: $get('contextPath', focusedNode),
+                    }
+                ]);
             }
         };
 
