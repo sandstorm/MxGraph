@@ -2,7 +2,7 @@
 {namespace media=Neos\Media\ViewHelpers}
 <div{attributes -> f:format.raw()}>
   <figure{f:if(condition: imageClassName, then: ' class="{imageClassName}"')}>
-    <f:if condition="{image}">
+    <f:if condition="{image} || {diagramSvgText}">
       <f:then>
         <f:if condition="{link}">
           <f:then>
