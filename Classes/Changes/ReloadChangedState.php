@@ -3,17 +3,16 @@
 namespace Sandstorm\MxGraph\Changes;
 
 use Neos\Neos\Ui\Domain\Model\AbstractChange;
-use Sandstorm\MxGraph\Domain\Model\Diagram;
 
 class ReloadChangedState extends AbstractChange
 {
 
-    public function canApply()
+    public function canApply(): bool
     {
         return true;
     }
 
-    public function apply()
+    public function apply(): void
     {
         $this->updateWorkspaceInfo();
     }

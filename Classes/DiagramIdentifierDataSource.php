@@ -2,8 +2,8 @@
 
 namespace Sandstorm\MxGraph;
 
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Annotations as Flow;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\I18n\Translator;
 use Neos\Neos\Service\DataSource\AbstractDataSource;
 use Sandstorm\LazyDataSource\LazyDataSourceTrait;
@@ -27,7 +27,7 @@ class DiagramIdentifierDataSource extends AbstractDataSource
      */
     protected $diagramIdentifierSearchService;
 
-    protected function getDataForIdentifiers(array $identifiers, NodeInterface $node = null, array $arguments = [])
+    protected function getDataForIdentifiers(array $identifiers, Node $node = null, array $arguments = [])
     {
         // all identifiers will be returned as is (with a label containing usage count)
         $options = [];
@@ -37,7 +37,7 @@ class DiagramIdentifierDataSource extends AbstractDataSource
         return $options;
     }
 
-    protected function searchData(string $searchTerm, NodeInterface $node = null, array $arguments = [])
+    protected function searchData(string $searchTerm, Node $node = null, array $arguments = [])
     {
         $options = [];
         if ($node !== null) {
