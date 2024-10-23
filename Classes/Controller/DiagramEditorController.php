@@ -11,10 +11,8 @@ use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\ResourceManagement\ResourceManager;
 use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\Image;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Neos\Domain\Service\UserService;
 use Sandstorm\MxGraph\DiagramIdentifierSearchService;
-use Sandstorm\MxGraph\Domain\Model\Diagram;
 
 class DiagramEditorController extends ActionController
 {
