@@ -1,4 +1,8 @@
 Sandstorm:
+  options:
+    nodeCreationHandlers:
+      nodeCreationHandler:
+        factoryClassName: 'Sandstorm\MxGraph\Factory\NodeCreationHandlerFactory'
   MxGraph:
     # Pointer to running instance of https://embed.diagrams.net.
     # Optionally, you can use the special string "LOCAL" here,

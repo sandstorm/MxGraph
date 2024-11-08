@@ -1,9 +1,9 @@
 <?php
 namespace Sandstorm\MxGraph;
 
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Package\Package as BasePackage;
-use Neos\ContentRepository\Domain\Model\Node;
 
 class Package extends BasePackage
 {

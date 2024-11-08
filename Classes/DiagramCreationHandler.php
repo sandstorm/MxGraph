@@ -2,14 +2,17 @@
 
 namespace Sandstorm\MxGraph;
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\Neos\Ui\NodeCreationHandler\NodeCreationHandlerInterface;
-use Sandstorm\MxGraph\Domain\Model\Diagram;
+use Neos\ContentRepository\Core\Feature\NodeModification\Dto\PropertyValuesToWrite;
+use Neos\Neos\Ui\Domain\NodeCreation\NodeCreationCommands;
+use Neos\Neos\Ui\Domain\NodeCreation\NodeCreationElements;
+use Neos\Neos\Ui\Domain\NodeCreation\NodeCreationHandlerInterface;
 
 class DiagramCreationHandler implements NodeCreationHandlerInterface
 {
-    public function handle(NodeInterface $node, array $data)
+    public function handle(NodeCreationCommands $commands, NodeCreationElements $elements): NodeCreationCommands
     {
-        $node->setProperty('diagramIdentifier', 'Diagram ' . date('Y-m-d H:i'));
+        return $commands->withInitialPropertyValues(PropertyValuesToWrite::fromArray([
+            'diagramIdentifier' => 'Diagram ' . date('Y-m-d H:i'),
+        ]));
     }
 }

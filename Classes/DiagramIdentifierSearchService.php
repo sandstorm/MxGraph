@@ -3,33 +3,53 @@
 namespace Sandstorm\MxGraph;
 
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindChildNodesFilter;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindClosestNodeFilter;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
+use Neos\ContentRepository\Core\Projection\ContentGraph\VisibilityConstraints;
+use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
 use Neos\Flow\Annotations as Flow;
-use Neos\Neos\Domain\Service\NodeSearchServiceInterface;
+use Neos\Neos\Domain\Service\NodeTypeNameFactory;
 
 /**
  * @Flow\Scope("singleton")
  */
 class DiagramIdentifierSearchService
 {
-
     /**
      * @Flow\Inject
-     * @var NodeSearchServiceInterface
+     * @var ContentRepositoryRegistry
      */
-    protected $nodeSearchService;
+    protected $contentRepositoryRegistry;
 
     /**
-     * @param string $query
-     * @param NodeInterface $node
+     * @param string $searchTerm
+     * @param Node $node
      * @return string[]
      */
-    public function findInIdentifier(string $searchTerm, NodeInterface $node): array
+    public function findInIdentifier(string $searchTerm, Node $node): array
     {
         $results = [];
-        $possibleResults = $this->nodeSearchService->findByProperties($searchTerm, ['Sandstorm.MxGraph:Diagram'], $node->getContext());
+
+        $contentRepository = $this->contentRepositoryRegistry->get($node->contentRepositoryId);
+        $subgraph = $contentRepository->getContentGraph($node->workspaceName)->getSubgraph(
+            $node->dimensionSpacePoint,
+            VisibilityConstraints::frontend()
+        );
+        $siteNode = $subgraph->findClosestNode(
+            $node->aggregateId,
+            FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
+        );
+        $possibleResults = $subgraph->findChildNodes(
+            $siteNode->aggregateId,
+            FindChildNodesFilter::create(
+                nodeTypes: 'Sandstorm.MxGraph:Diagram',
+                propertyValue: $searchTerm
+            ),
+        );
+
         foreach ($possibleResults as $possibleResult) {
-            assert($possibleResult instanceof NodeInterface);
+            assert($possibleResult instanceof Node);
 
             // we include the diagram identifier if it contains the $searchTerm (case-insensitively)
             $possibleDiagramIdentifier = $possibleResult->getProperty('diagramIdentifier');
@@ -45,15 +65,32 @@ class DiagramIdentifierSearchService
 
     /**
      * @param string $diagramIdentifier
-     * @return NodeInterface[]
+     * @return Node[]
      */
-    public function findRelatedDiagramsWithIdentifierExcludingOwn(string $diagramIdentifier, NodeInterface $contextNode): array
+    public function findRelatedDiagramsWithIdentifierExcludingOwn(string $diagramIdentifier, Node $contextNode): array
     {
         $results = [];
-        $possibleResults = $this->nodeSearchService->findByProperties($diagramIdentifier, ['Sandstorm.MxGraph:Diagram'], $contextNode->getContext());
+
+        $contentRepository = $this->contentRepositoryRegistry->get($contextNode->contentRepositoryId);
+        $subgraph = $contentRepository->getContentGraph($contextNode->workspaceName)->getSubgraph(
+            $contextNode->dimensionSpacePoint,
+            VisibilityConstraints::frontend()
+        );
+        $siteNode = $subgraph->findClosestNode(
+            $contextNode->aggregateId,
+            FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
+        );
+        $possibleResults = $subgraph->findChildNodes(
+            $siteNode->aggregateId,
+            FindChildNodesFilter::create(
+                nodeTypes: 'Sandstorm.MxGraph:Diagram',
+                propertyValue: $diagramIdentifier
+            ),
+        );
+
         foreach ($possibleResults as $node) {
-            assert($node instanceof NodeInterface);
-            if ($contextNode->getContextPath() === $node->getContextPath()) {
+            assert($node instanceof Node);
+            if ($contextNode->equals($node)) {
                 // we skip ourselves
                 continue;
             }
@@ -70,19 +107,18 @@ class DiagramIdentifierSearchService
 
     /**
      * @param string $diagramIdentifier
-     * @param NodeInterface $contextNode
-     * @return NodeInterface|null
+     * @param Node $contextNode
+     * @return Node|null
      */
-    public function findMostRecentDiagramWithIdentifierExcludingOwn(string $diagramIdentifier, NodeInterface $contextNode): ?NodeInterface
+    public function findMostRecentDiagramWithIdentifierExcludingOwn(string $diagramIdentifier, Node $contextNode): ?Node
     {
         $relatedDiagramNodes = $this->findRelatedDiagramsWithIdentifierExcludingOwn($diagramIdentifier, $contextNode);
 
-        uasort($relatedDiagramNodes, function(NodeInterface $a, NodeInterface $b) {
-            if (method_exists($a, 'getLastModificationDateTime') && method_exists($b, 'getLastModificationDateTime')) {
-                return $b->getLastModificationDateTime() <=> $a->getLastModificationDateTime();
-            }
+        uasort($relatedDiagramNodes, function(Node $nodeA, Node $nodeB) {
+            $timestampA = $nodeA->timestamps->lastModified ?? $nodeA->timestamps->created;
+            $timestampB = $nodeB->timestamps->lastModified ?? $nodeA->timestamps->created;
 
-            return 0;
+            return $timestampB <=> $timestampA;
         });
 
         if (count($relatedDiagramNodes) > 0) {
