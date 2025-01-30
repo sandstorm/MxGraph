@@ -45,6 +45,7 @@ class DiagramNodeHandler
         if ($sourceDiagramNode) {
             $node->setProperty('diagramSource', $sourceDiagramNode->getProperty('diagramSource'));
             $node->setProperty('diagramSvgText', $sourceDiagramNode->getProperty('diagramSvgText'));
+            $node->setProperty('image', $sourceDiagramNode->getProperty('image'));
         }
     }
 }
