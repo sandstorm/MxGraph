@@ -3,6 +3,7 @@
 namespace Sandstorm\MxGraph;
 
 
+use Neos\ContentRepository\Core\Feature\Security\Exception\AccessDenied;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindChildNodesFilter;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindClosestNodeFilter;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
@@ -32,19 +33,23 @@ class DiagramIdentifierSearchService
         $results = [];
 
         $contentRepository = $this->contentRepositoryRegistry->get($node->contentRepositoryId);
-        $subgraph = $contentRepository->getContentGraph($node->workspaceName)->getSubgraph(
-            $node->dimensionSpacePoint,
-            VisibilityConstraints::frontend()
-        );
+        try {
+            $subgraph = $contentRepository->getContentSubgraph(
+                $node->workspaceName,
+                $node->dimensionSpacePoint
+            );
+        } catch (AccessDenied) {
+            return [];
+        }
         $siteNode = $subgraph->findClosestNode(
             $node->aggregateId,
             FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
         );
+
         $possibleResults = $subgraph->findChildNodes(
             $siteNode->aggregateId,
             FindChildNodesFilter::create(
-                nodeTypes: 'Sandstorm.MxGraph:Diagram',
-                propertyValue: $searchTerm
+                nodeTypes: 'Sandstorm.MxGraph:Diagram'
             ),
         );
 
@@ -74,17 +79,17 @@ class DiagramIdentifierSearchService
         $contentRepository = $this->contentRepositoryRegistry->get($contextNode->contentRepositoryId);
         $subgraph = $contentRepository->getContentGraph($contextNode->workspaceName)->getSubgraph(
             $contextNode->dimensionSpacePoint,
-            VisibilityConstraints::frontend()
+            VisibilityConstraints::default()
         );
         $siteNode = $subgraph->findClosestNode(
             $contextNode->aggregateId,
             FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
         );
+
         $possibleResults = $subgraph->findChildNodes(
             $siteNode->aggregateId,
             FindChildNodesFilter::create(
                 nodeTypes: 'Sandstorm.MxGraph:Diagram',
-                propertyValue: $diagramIdentifier
             ),
         );
 
@@ -114,7 +119,7 @@ class DiagramIdentifierSearchService
     {
         $relatedDiagramNodes = $this->findRelatedDiagramsWithIdentifierExcludingOwn($diagramIdentifier, $contextNode);
 
-        uasort($relatedDiagramNodes, function(Node $nodeA, Node $nodeB) {
+        uasort($relatedDiagramNodes, function (Node $nodeA, Node $nodeB) {
             $timestampA = $nodeA->timestamps->lastModified ?? $nodeA->timestamps->created;
             $timestampB = $nodeB->timestamps->lastModified ?? $nodeA->timestamps->created;
 
