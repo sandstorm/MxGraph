@@ -2,11 +2,12 @@ import React, {Fragment, PureComponent} from 'react';
 import {Button} from '@neos-project/react-ui-components';
 import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {connect} from 'react-redux';
-import {$get} from 'plow-js';
 
 @connect(state => ({
+    focused: state?.cr?.nodes?.focused,
     focusedNode: selectors.CR.Nodes.focusedSelector(state),
-    currentIframeUrl: $get('ui.contentCanvas.src', state)
+    focusedNodesContextPaths: selectors.CR.Nodes.focusedNodePathsSelector(state),
+    currentIframeUrl: state?.ui?.contentCanvas?.src,
 }), {
     persistChanges: actions.Changes.persistChanges
 })
@@ -35,13 +36,14 @@ export default class DiagramEditor extends PureComponent {
                 persistChanges([
                     {
                         type: 'Sandstorm.MxGraph:ReloadChangedState',
-                        subject: $get('contextPath', focusedNode),
+                        subject: focusedNode?.contextPath,
                     }
                 ]);
             }
         };
 
-        const targetUrl = '/neos/mxgraph?diagramNode=' + $get('contextPath', this.props.focusedNode);
+        console.log(this.props.focusedNode);
+        const targetUrl = '/neos/mxgraph?diagramNode=' + this.props.focusedNode?.contextPath;
         const clickButton = () => {
             window.SandstormMxGraphApiImport = null;
             window.open(targetUrl, '_blank');
