@@ -61,6 +61,7 @@ class DiagramNodeHandler
                 PropertyValuesToWrite::fromArray([
                     'diagramSource' => $sourceDiagramNode->getProperty('diagramSource'),
                     'diagramSvgText' => $sourceDiagramNode->getProperty('diagramSvgText'),
+                    'image' => $sourceDiagramNode->getProperty('image'),
                 ]),
             ));
         }
