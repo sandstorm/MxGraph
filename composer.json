@@ -3,19 +3,13 @@
     "type": "neos-plugin",
     "name": "sandstorm/mxgraph",
     "require": {
-        "neos/neos": ">=7.0.0 || dev-master",
+        "neos/neos": "^9.0 || dev-master",
         "neos/nodetypes-basemixins": ">=3.0.0 || dev-master",
-        "sandstorm/lazydatasource": "^2.0.1 || dev-neos9"
+        "sandstorm/lazydatasource": "^3.0 || dev-master"
     },
     "autoload": {
         "psr-4": {
             "Sandstorm\\MxGraph\\": "Classes/"
-        }
-    },
-    "repositories": {
-        "queo/lazydatasource": {
-            "type": "git",
-            "url": "https://github.com/queoGmbH/LazyDataSource.git"
         }
     },
     "extra": {
