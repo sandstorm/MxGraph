@@ -4,7 +4,7 @@
     "watch": "node build.js --watch"
   },
   "dependencies": {
-    "@neos-project/neos-ui-extensibility": "9.0.0-beta20",
+    "@neos-project/neos-ui-extensibility": "^9.0.0",
     "esbuild": "^0.17.0",
     "esbuild-css-modules-plugin": "^3.1.2"
   },

@@ -42,7 +42,6 @@ export default class DiagramEditor extends PureComponent {
             }
         };
 
-        console.log(this.props.focusedNode);
         const targetUrl = '/neos/mxgraph?diagramNode=' + this.props.focusedNode?.contextPath;
         const clickButton = () => {
             window.SandstormMxGraphApiImport = null;
