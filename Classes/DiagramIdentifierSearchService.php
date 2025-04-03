@@ -4,7 +4,6 @@ namespace Sandstorm\MxGraph;
 
 
 use Neos\Flow\Annotations as Flow;
-use Neos\ContentRepository\Core\Feature\Security\Exception\AccessDenied;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindClosestNodeFilter;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindDescendantNodesFilter;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\NodeType\NodeTypeCriteria;
@@ -36,14 +35,10 @@ class DiagramIdentifierSearchService
         $results = [];
 
         $contentRepository = $this->contentRepositoryRegistry->get($node->contentRepositoryId);
-        try {
-            $subgraph = $contentRepository->getContentSubgraph(
-                $node->workspaceName,
-                $node->dimensionSpacePoint
-            );
-        } catch (AccessDenied) {
-            return [];
-        }
+        $subgraph = $contentRepository->getContentSubgraph(
+            $node->workspaceName,
+            $node->dimensionSpacePoint
+        );
         $siteNode = $subgraph->findClosestNode(
             $node->aggregateId,
             FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
