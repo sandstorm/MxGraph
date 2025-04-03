@@ -3,13 +3,16 @@
 namespace Sandstorm\MxGraph;
 
 
+use Neos\Flow\Annotations as Flow;
 use Neos\ContentRepository\Core\Feature\Security\Exception\AccessDenied;
-use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindChildNodesFilter;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindClosestNodeFilter;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindDescendantNodesFilter;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\NodeType\NodeTypeCriteria;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\PropertyValue\Criteria\PropertyValueContains;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\ContentRepository\Core\Projection\ContentGraph\VisibilityConstraints;
+use Neos\ContentRepository\Core\SharedModel\Node\PropertyName;
 use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
-use Neos\Flow\Annotations as Flow;
 use Neos\Neos\Domain\Service\NodeTypeNameFactory;
 
 /**
@@ -46,22 +49,20 @@ class DiagramIdentifierSearchService
             FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
         );
 
-        $possibleResults = $subgraph->findChildNodes(
+        $propertyConstraint = PropertyValueContains::create(PropertyName::fromString('diagramIdentifier'), $searchTerm, false);
+        $possibleResults = $subgraph->findDescendantNodes(
             $siteNode->aggregateId,
-            FindChildNodesFilter::create(
-                nodeTypes: 'Sandstorm.MxGraph:Diagram'
+            FindDescendantNodesFilter::create(
+                nodeTypes: 'Sandstorm.MxGraph:Diagram',
+                propertyValue: $propertyConstraint
             ),
         );
 
         foreach ($possibleResults as $possibleResult) {
             assert($possibleResult instanceof Node);
-
-            // we include the diagram identifier if it contains the $searchTerm (case-insensitively)
             $possibleDiagramIdentifier = $possibleResult->getProperty('diagramIdentifier');
-            if (str_contains(strtolower($possibleDiagramIdentifier), strtolower($searchTerm))) {
-                if (!isset($results[$possibleDiagramIdentifier])) {
-                    $results[$possibleDiagramIdentifier] = $possibleDiagramIdentifier;
-                }
+            if (!isset($results[$possibleDiagramIdentifier])) {
+                $results[$possibleDiagramIdentifier] = $possibleDiagramIdentifier;
             }
         }
 
@@ -86,10 +87,12 @@ class DiagramIdentifierSearchService
             FindClosestNodeFilter::create(nodeTypes: NodeTypeNameFactory::NAME_SITE)
         );
 
-        $possibleResults = $subgraph->findChildNodes(
+        $propertyConstraint = PropertyValueContains::create(PropertyName::fromString('diagramIdentifier'), $diagramIdentifier, false);
+        $possibleResults = $subgraph->findDescendantNodes(
             $siteNode->aggregateId,
-            FindChildNodesFilter::create(
-                nodeTypes: 'Sandstorm.MxGraph:Diagram',
+            FindDescendantNodesFilter::create(
+                nodeTypes: NodeTypeCriteria::fromFilterString('Sandstorm.MxGraph:Diagram'),
+                propertyValue: $propertyConstraint
             ),
         );
 
