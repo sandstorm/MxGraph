@@ -12,6 +12,18 @@ Sie können die Diagramm-ID frei wählen und erhalten eine Autovervollständigun
 Diagramme, die im System bekannt sind.
         </source>
       </trans-unit>
+      <trans-unit id="properties.alternativeText" xml:space="preserve">
+        <source>Alt-Text</source>
+      </trans-unit>
+      <trans-unit id="properties.title" xml:space="preserve">
+        <source>Titel</source>
+      </trans-unit>
+      <trans-unit id="properties.caption.ui.inline.editorOptions.placeholder" xml:space="preserve">
+        <source>Bildunterschrift... Eine leere Bildunterschrift wird nicht gerendert.</source>
+      </trans-unit>
+      <trans-unit id="properties.alignment" xml:space="preserve">
+        <source>Ausrichtung</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

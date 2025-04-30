@@ -12,6 +12,18 @@ You can freely choose the Diagram Identifier, and get an autocomplete for existi
 known to the system.
         </source>
       </trans-unit>
+      <trans-unit id="properties.alternativeText" xml:space="preserve">
+        <source>Alternative Text</source>
+      </trans-unit>
+      <trans-unit id="properties.title" xml:space="preserve">
+        <source>Title</source>
+      </trans-unit>
+      <trans-unit id="properties.caption.ui.inline.editorOptions.placeholder" xml:space="preserve">
+        <source>Add a caption.. Empty caption will not be rendered.</source>
+      </trans-unit>
+      <trans-unit id="properties.alignment" xml:space="preserve">
+        <source>Alignment</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

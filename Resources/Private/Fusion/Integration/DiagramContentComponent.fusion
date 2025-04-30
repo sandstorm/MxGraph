@@ -1,0 +1,41 @@
+prototype(Sandstorm.MxGraph:Diagram) < prototype(Neos.Neos:ContentComponent) {
+  renderer = Sandstorm.MxGraph:DiagramComponent {
+    diagram = Neos.Fusion:Case {
+      hasDiagram {
+        condition = ${q(node).property('diagramSvgText') != null}
+        renderer = ${q(node).property('diagramSvgText')}
+      }
+
+      // in backend show a dummy image when no diagram is set
+      inBackend {
+        condition = ${renderingMode.isEdit}
+        renderer = afx`
+          <img
+            src={StaticResource.uri('Neos.Neos', 'Public/Images/dummy-image.svg')}
+          />
+        `
+      }
+
+      // in frontend render nothing
+      default {
+        condition = ${true}
+        renderer = ''
+      }
+    }
+
+    link = ${q(node).property('link')}
+    link.@process.convertUris = Neos.Neos:ConvertUris {
+      forceConversion = true
+    }
+
+    title = ${q(node).property('title')}
+    alternativeText = ${q(node).property('alternativeText')}
+    alignment = ${q(node).property('alignment')}
+
+    caption = Neos.Neos:Editable {
+      property = 'caption'
+    }
+
+    inEditMode = ${renderingMode.isEdit}
+  }
+}

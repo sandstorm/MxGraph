@@ -1,70 +1,34 @@
 <?php
 namespace Sandstorm\MxGraph\Controller;
 
-use Neos\ContentRepository\Core\Feature\NodeModification\Command\SetNodeProperties;
-use Neos\ContentRepository\Core\Feature\NodeModification\Dto\PropertyValuesToWrite;
+use Neos\ContentRepository\Core\Feature\Security\Exception\AccessDenied;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\ContentRepository\Core\SharedModel\Node\NodeAddress;
-use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
-use Neos\Flow\ResourceManagement\ResourceManager;
-use Neos\Media\Domain\Model\Asset;
-use Neos\Media\Domain\Model\Image;
 use Neos\Neos\Domain\Service\UserService;
-use Sandstorm\MxGraph\DiagramIdentifierSearchService;
+use Sandstorm\MxGraph\ContentRepository\DiagramContentRepositoryService;
 
 class DiagramEditorController extends ActionController
 {
-
-    /**
-     * @Flow\Inject
-     * @var ResourceManager
-     */
-    protected $resourceManager;
-
-    /**
-     * @Flow\Inject
-     * @var UserService
-     */
-    protected $userService;
-
-    /**
-     * @Flow\Inject
-     * @var DiagramIdentifierSearchService
-     */
-    protected $diagramIdentifierSearchService;
-
-    /**
-     * @Flow\Inject
-     * @var ContentRepositoryRegistry
-     */
-    protected $contentRepositoryRegistry;
-
-    /**
-     * @Flow\InjectConfiguration(path="drawioEmbedUrl")
-     * @var string
-     */
-    protected $drawioEmbedUrl;
     const LOCAL_DRAWIO_EMBED_URL = 'LOCAL';
 
-    /**
-     * @Flow\InjectConfiguration(path="drawioEmbedParameters")
-     * @var array
-     */
-    protected $drawioEmbedParameters;
+    #[Flow\Inject]
+    protected UserService $userService;
 
-    /**
-     * @Flow\InjectConfiguration(path="drawioConfiguration")
-     * @var array
-     */
-    protected $drawioConfiguration;
+    #[Flow\Inject]
+    protected DiagramContentRepositoryService $diagramContentRepositoryService;
 
+    #[Flow\InjectConfiguration(path: 'drawioEmbedUrl')]
+    protected string $drawioEmbedUrl;
 
-    /**
-     * @param Node $diagramNode
-     */
-    public function indexAction(Node $diagramNode)
+    #[Flow\InjectConfiguration(path: 'drawioEmbedParameters')]
+    protected array $drawioEmbedParameters;
+
+    #[Flow\InjectConfiguration(path: 'drawioConfiguration')]
+    protected array|null $drawioConfiguration;
+
+    public function indexAction(Node $diagramNode): void
     {
         $drawioEmbedUrlWithParameters = $this->drawioEmbedUrl;
         if ($drawioEmbedUrlWithParameters === self::LOCAL_DRAWIO_EMBED_URL) {
@@ -121,68 +85,24 @@ class DiagramEditorController extends ActionController
     }
 
     /**
+     * This renders Resources/Private/Templates/DiagramEditor/OfflineLocalDiagramsNet.html (see indexAction)
      */
     public function offlineLocalDiagramsNetAction()
     {
     }
 
-
     /**
-     * @param Node $node
-     * @param string $xml
-     * @param string $svg
      * @Flow\SkipCsrfProtection
+     * @throws AccessDenied
      */
-    public function saveAction(Node $node, $xml, $svg)
+    public function saveAction(Node $node, string $xml, string $svg): string
     {
-        $contentRepository = $this->contentRepositoryRegistry->get($node->contentRepositoryId);
-
         if (empty($svg)) {
             // XML without SVG -> autosaved - not supported right now.
-            $contentRepository->handle(SetNodeProperties::create(
-                $node->workspaceName,
-                $node->aggregateId,
-                $node->originDimensionSpacePoint,
-                PropertyValuesToWrite::fromArray(['diagramSourceAutosaved' => $xml]),
-            ));
-            throw new \RuntimeException("TODO - autosave not supported right now.");
+            throw new \RuntimeException("DiagramEditorController::saveAction: autosave not supported right now.");
         }
 
-        $propertyValuesToWrite = PropertyValuesToWrite::fromArray([
-            'diagramSource' => $xml,
-            'diagramSvgText' => $svg,
-        ]);
-
-        $diagramIdentifier = $node->getProperty('diagramIdentifier');
-        if (!empty($diagramIdentifier)) {
-            // also update related diagrams
-            foreach ($this->diagramIdentifierSearchService->findRelatedDiagramsWithIdentifierExcludingOwn($diagramIdentifier, $node) as $relatedDiagramNode) {
-                $propertyValuesToWrite = $propertyValuesToWrite->merge(PropertyValuesToWrite::fromArray([
-                    'diagramSource' => $xml,
-                    'diagramSvgText' => $svg,
-                ]));
-            }
-        }
-
-        // BEGIN DEPRECATION since version 3.0.0
-        $persistentResource = $this->resourceManager->importResourceFromContent($svg, 'diagram.svg');
-
-        $image = $node->getProperty('image');
-        if ($image instanceof Asset) {
-            // BUG: this also changes the live workspace - nasty. But if we remove it, we get 1000s of assets
-            // cluttering the Media UI.
-            $image->setResource($persistentResource);
-        } else {
-            $image = new Image($persistentResource);
-        }
-
-        $propertyValuesToWrite = $propertyValuesToWrite->withValue('image', $image);
-        $contentRepository->handle(SetNodeProperties::create(
-            $node->workspaceName,
-            $node->aggregateId,
-            $node->originDimensionSpacePoint,
-            $propertyValuesToWrite,
-        ));
+        $this->diagramContentRepositoryService->applyDataToDiagramNodeAndRelatedNodes($node, $xml, $svg);
 
         return 'OK';
     }

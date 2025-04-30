@@ -1,38 +1,37 @@
-
 'Sandstorm.MxGraph:Diagram':
   superTypes:
     'Neos.Neos:Content': true
-    'Neos.NodeTypes.BaseMixins:ContentImageMixin': true
+    # provide alignment options
+    'Neos.NodeTypes.BaseMixins:ImageAlignmentMixin': true
+    # provide link options
+    'Neos.NodeTypes.BaseMixins:LinkMixin': true
   options:
     nodeCreationHandlers:
-      - nodeCreationHandler: Sandstorm\MxGraph\DiagramCreationHandler
+      mxGraph:
+        factoryClassName: Sandstorm\MxGraph\ContentRepository\CreationHandler\DiagramCreationHandlerFactory
   ui:
     label: Diagram
     icon: icon-picture
     position: 300
   properties:
-    # DEPRECATED with version 3
-    image:
-      ui:
-        reloadIfChanged: true
-        inspector: null
-    # BEGINNING with version 3
+    # the diagram as svg - if empty, the dummy image is shown
     diagramSvgText:
       type: string
+    # the diagram xml source
     diagramSource:
       ui:
         inspector:
           editor: Sandstorm.MxGraph/Editors/DiagramEditor
-          group: image
-    # BEGINNING with version 3.1
+          group: 'default'
+    # global unique identifier for the diagram
     diagramIdentifier:
       type: string
       ui:
         label: i18n
-        # if the diagram Identifier changed, the DiagramNodeHandler might have updated diagramSvgText and diagramSource; thus we need to refresh.
+        # when changing the identifier to an existing one, the original diagram's content will be copied into this node -> reload to see the changes
         reloadIfChanged: true
         inspector:
-          group: image
+          group: 'default'
           editor: 'Sandstorm.LazyDataSource/Inspector/Editors/DataSourceSelectEditor'
           editorOptions:
             placeholder: Create new or select ...
@@ -40,3 +39,60 @@
             dataSourceDisableCaching: true
         help:
           message: i18n
+
+    # because the diagram is basically an image, we want secondary properties for a11y, etc.
+    alternativeText:
+      type: string
+      defaultValue: ''
+      ui:
+        label: i18n
+        inspector:
+          group: 'default'
+    title:
+      type: string
+      defaultValue: ''
+      ui:
+        label: i18n
+        inspector:
+          group: 'default'
+    caption:
+      type: string
+      defaultValue: ''
+      ui:
+        inlineEditable: true
+        inline:
+          editorOptions:
+            autoparagraph: true
+            placeholder: i18n
+            linking:
+              anchor: true
+              title: true
+              relNofollow: true
+              targetBlank: true
+            formatting:
+              strong: true
+              em: true
+              sub: true
+              sup: true
+              pre: true
+              underline: true
+              strikethrough: true
+              removeFormat: true
+              left: true
+              right: true
+              center: true
+              justify: true
+              a: true
+
+    # override the default image alignment
+    alignment:
+      ui:
+        label: i18n
+        inspector:
+          group: 'default'
+
+    # override the default link
+    link:
+      ui:
+        inspector:
+          group: 'default'
