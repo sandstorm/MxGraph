@@ -25,6 +25,7 @@
 ## How to install
 
 * Neos 8.x: `composer install sandstorm/mxgraph` - Version 3.x
+* Neos 9.x: `composer require sandstorm/mxgraph` - Version 4.x
 
 then, enjoy :-)
 
@@ -173,4 +174,4 @@ That's why the **fully disconnected mode is enabled by default, by setting `Sand
 
 GPL v3
 
-Created with ❤ by sandstorm|media 2016-2023.
+Created with ❤ by sandstorm|media 2016-2025.
