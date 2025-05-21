@@ -117,6 +117,9 @@
   <![CDATA[
   Editor.enableServiceWorker = false;
   App.main();
+
+  // set base URL for images to Resources dir of this package
+  mxUrlConverter.prototype.baseUrl = DRAWIO_BASE_URL;
   ]]>
 </script>
 </body>
