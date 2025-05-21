@@ -24,14 +24,9 @@ function sync-drawio-offline-source() {
   mkdir tmp || echo "tmp file exists"
   cd tmp
   if [ ! -d drawio ]; then
-    git clone https://github.com/jgraph/drawio.git
+    # we pin a specific version
+    git clone --depth 1 https://github.com/jgraph/drawio.git --single-branch --branch v20.8.23
   fi
-
-  cd drawio
-  # we pin a specific version
-  git checkout v20.8.23
-  cd ..
-
 
   rm -Rf ../Resources/Public/vendor/drawio
   mkdir -p ../Resources/Public/vendor/drawio
@@ -42,6 +37,7 @@ function sync-drawio-offline-source() {
   mkdir -p ../Resources/Public/vendor/drawio/js
   mkdir -p ../Resources/Public/vendor/drawio/resources
   mkdir -p ../Resources/Public/vendor/drawio/images
+  mkdir -p ../Resources/Public/vendor/drawio/img
 
   cp -R drawio/src/main/webapp/styles/grapheditor.css ../Resources/Public/vendor/drawio/styles/grapheditor.css
   cp -R drawio/src/main/webapp/styles/fonts ../Resources/Public/vendor/drawio/styles/fonts
@@ -52,7 +48,7 @@ function sync-drawio-offline-source() {
   cp -R drawio/src/main/webapp/js/stencils.min.js ../Resources/Public/vendor/drawio/js/
   cp -R drawio/src/main/webapp/resources/* ../Resources/Public/vendor/drawio/resources/
   cp -R drawio/src/main/webapp/images/ ../Resources/Public/vendor/drawio/images
-
+  cp -R drawio/src/main/webapp/img/ ../Resources/Public/vendor/drawio/img
 }
 
 function clean() {
