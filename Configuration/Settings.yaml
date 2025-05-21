@@ -87,3 +87,10 @@ Neos:
       changes:
         types:
           'Sandstorm.MxGraph:ReloadChangedState': Sandstorm\MxGraph\Changes\ReloadChangedState
+
+  ContentRepositoryRegistry:
+    presets:
+      'default':
+        commandHooks:
+          'Sandstorm.MxGraph:Diagram':
+            factoryObjectName: Sandstorm\MxGraph\ContentRepository\CommandHook\DiagramCommandHookFactory

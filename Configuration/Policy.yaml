@@ -1,8 +1,4 @@
 privilegeTargets:
-
-# We allow access to "everybody" to the Registration process, as well as login and also logout, because otherwise a user
-# that has no roles yet cannot logout anymore.
-
   'Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
     'Sandstorm.MxGraph:Editor':
       matcher: 'method(Sandstorm\MxGraph\Controller\DiagramEditorController->(?!initialize).*Action())'

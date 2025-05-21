@@ -1,0 +1,57 @@
+prototype(Sandstorm.MxGraph:DiagramComponent) < prototype(Neos.Fusion:Component) {
+  diagram = ''
+  title = ''
+  link = ''
+  alternativeText = ''
+  alignment = ''
+  caption = ''
+  inEditMode = false
+
+  @private {
+    diagramWrappedWithLink = Neos.Fusion:Case {
+      hasLink {
+        condition = ${props.link != '' && !props.inEditMode}
+        renderer = afx`
+          <a href={props.link} target="_blank" rel="noopener noreferrer">
+            {props.diagram}
+          </a>
+        `
+      }
+
+      default {
+        condition = ${true}
+        renderer = ${props.diagram}
+      }
+    }
+
+    // map image alignment to flex values
+    flexAlignment = Neos.Fusion:Case {
+      left {
+        condition = ${props.alignment == 'left'}
+        renderer = 'start'
+      }
+
+      center {
+        condition = ${props.alignment == 'center'}
+        renderer = 'center'
+      }
+
+      right {
+        condition = ${props.alignment == 'right'}
+        renderer = 'end'
+      }
+
+      default {
+        condition = ${true}
+        renderer = 'start'
+      }
+    }
+  }
+
+  renderer = afx`
+    <figure style={'display: flex; flex-direction: column; align-items: ' + private.flexAlignment} title={props.title} aria-label={props.alternativeText}>
+      {private.diagramWrappedWithLink}
+      <figcaption @if.hasCaption={props.caption != ''}>{props.caption}</figcaption>
+    </figure>
+  `
+}
