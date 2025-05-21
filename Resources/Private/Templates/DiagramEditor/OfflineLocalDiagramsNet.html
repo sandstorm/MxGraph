@@ -118,8 +118,17 @@
   Editor.enableServiceWorker = false;
   App.main();
 
+  // !!! Patch mxUrlConverter to use the base URL of this package
   // set base URL for images to Resources dir of this package
   mxUrlConverter.prototype.baseUrl = DRAWIO_BASE_URL;
+  // change updateBaseUrl to use the base URL of this package
+  mxUrlConverter.prototype.updateBaseUrl = function () {
+    // this is the same as in the original mxUrlConverter
+    this.baseDomain = location.protocol + "//" + location.host;
+    // use the base URL of this package
+    this.baseUrl = DRAWIO_BASE_URL;
+  };
+
   ]]>
 </script>
 </body>
