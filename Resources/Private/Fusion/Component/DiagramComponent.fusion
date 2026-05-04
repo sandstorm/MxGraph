@@ -6,6 +6,7 @@ prototype(Sandstorm.MxGraph:DiagramComponent) < prototype(Neos.Fusion:Component)
   alignment = ''
   caption = ''
   inEditMode = false
+  class = ''
 
   @private {
     diagramWrappedWithLink = Neos.Fusion:Case {
@@ -49,7 +50,7 @@ prototype(Sandstorm.MxGraph:DiagramComponent) < prototype(Neos.Fusion:Component)
   }
 
   renderer = afx`
-    <figure style={'display: flex; flex-direction: column; align-items: ' + private.flexAlignment} title={props.title} aria-label={props.alternativeText}>
+    <figure class={props.class} style={'display: flex; flex-direction: column; align-items: ' + private.flexAlignment} title={props.title} aria-label={props.alternativeText}>
       {private.diagramWrappedWithLink}
       <figcaption @if.hasCaption={props.caption != ''}>{props.caption}</figcaption>
     </figure>
