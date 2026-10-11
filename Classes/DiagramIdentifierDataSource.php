@@ -22,7 +22,7 @@ class DiagramIdentifierDataSource extends AbstractDataSource
     #[Flow\Inject]
     protected DiagramContentRepositoryService $diagramContentRepositoryService;
 
-    protected function getDataForIdentifiers(array $identifiers, Node $node = null, array $arguments = []): array
+    protected function getDataForIdentifiers(array $identifiers, ?Node $node = null, array $arguments = []): array
     {
         // all identifiers will be returned as is (with a label containing usage count)
         $options = [];
@@ -37,7 +37,7 @@ class DiagramIdentifierDataSource extends AbstractDataSource
     /**
      * @throws AccessDenied
      */
-    protected function searchData(string $searchTerm, Node $node = null, array $arguments = []): array
+    protected function searchData(string $searchTerm, ?Node $node = null, array $arguments = []): array
     {
         $options = [];
         if ($node !== null) {
